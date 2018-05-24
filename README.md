@@ -1,2 +1,8 @@
-# -MLlib--RNA-
-Spark,Mllib,protein,RNA,PSSM,AUC,MCC,Cross-validation,predicted 
+啦啦啦，说明：这是我的一次毕业设计。
+具体的实现过程为：
+数据的获取：论文《Predicting RNA-binding sites of proteins using support vector machines and evolutionary information》所提供的数据集RPB109。
+	数据的预处理：在原始数据集上对每个氨基酸进行特征提取和标记。从以往的研究，对序列比对的进化信息对于预测相互作用位点有极大的提升，因此我们将提取每个氨基酸的特异打分矩阵PSSM，再将其转化为滑动PSSM用来描述进化信息，作为模型的特征输入。结合之前的标记信息，便可得到标记-特征的可用数据集。
+	构建模型：将上述数据集按比例8：1：1分为训练集（20087），验证集（2510）和测试集（2510）。利用Spark并行化的处理方法，将训练集平均分为三部分，利用Mllib所提供的SVMWithSGD算法对每一部分训练成一个SVM分类器，对于最终结果的判定将综合三个分类器。（待研究其他的Spark并行处理方法）
+	分析和评估模型：利用上述构建的模型测试验证集，将运行时间和ROC曲线作为评估模型的效果，并计算出AUC值。
+	合理优化：针对三个SVM模型，分别评估numIterations（迭代次数），stepSize（步长），regParam（正则化参数），并交叉评估找出最好的参数组合，得到最优模型。
+
